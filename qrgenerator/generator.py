@@ -208,41 +208,54 @@ class QRGenerator:
                 logo_path = None
 
         if self.show_logo and logo_path and os.path.exists(logo_path):
-            logo = Image.open(logo_path)
-            logo_size = int(min(qr_code_image.size) * 0.12)  # 12% of QR size
+            logo = Image.open(logo_path).convert("RGBA")
+            logo_size = int(min(qr_code_image.size) * 0.20)  # 20% of QR size
             logo.thumbnail((logo_size, logo_size))
 
             # Create a rounded rectangle mask for the logo
             mask = Image.new('L', logo.size, 0)
             draw = ImageDraw.Draw(mask)
-            radius = int(min(logo.size) * 0.25)  # 25% corner radius
+            radius = int(min(logo.size) * 0.10)  # 10% corner radius
             draw.rounded_rectangle(
-            [(0, 0), logo.size],
-            radius=radius,
-            fill=255
+                [(0, 0), logo.size],
+                radius=radius,
+                fill=255
             )
-            logo = logo.convert("RGBA")
-            logo.putalpha(mask)
 
-            # Create a white border with rounded corners
+            # Apply the rounded mask to the logo (preserve transparency)
+            logo_rounded = Image.new('RGBA', logo.size)
+            logo_rounded.paste(logo, (0, 0), mask=mask)
+
+            # Create a white border with rounded corners (fully opaque)
             border_size = 12  # Thickness of border
             border_img_size = (logo.size[0] + 2 * border_size, logo.size[1] + 2 * border_size)
-            border_img = Image.new('RGBA', border_img_size, (255, 255, 255, 0))
+            border_img = Image.new('RGBA', border_img_size, (255, 255, 255, 255))  # Opaque white
             border_draw = ImageDraw.Draw(border_img)
             border_draw.rounded_rectangle(
-            [(0, 0), border_img_size],
-            radius=radius + border_size,
-            fill=(255, 255, 255, 255)
+                [(0, 0), border_img_size],
+                radius=radius + border_size,
+                fill=(255, 255, 255, 255)
             )
-            # Paste the logo onto the border using the mask for roundness
-            border_img.paste(logo, (border_size, border_size), mask=logo)
+            # Paste the rounded logo onto the border using the mask for roundness
+            border_img.paste(logo_rounded, (border_size, border_size), mask=logo_rounded)
+
+            # Calculate where to paste the border_img (centered)
+            paste_x = (qr_code_image.size[0] - border_img.size[0]) // 2
+            paste_y = (qr_code_image.size[1] - border_img.size[1]) // 2
+
+            # Clear the area under the logo+border (fill with fully opaque white)
+            qr_draw = ImageDraw.Draw(qr_code_image)
+            qr_draw.rounded_rectangle(
+                [(paste_x, paste_y), (paste_x + border_img.size[0], paste_y + border_img.size[1])],
+                radius=radius + border_size,
+                fill=(255, 255, 255, 255)
+            )
 
             # Paste the bordered logo onto the QR code
             qr_code_image.paste(
-            border_img,
-            ((qr_code_image.size[0] - border_img.size[0]) // 2,
-             (qr_code_image.size[1] - border_img.size[1]) // 2),
-            mask=border_img
+                border_img,
+                (paste_x, paste_y),
+                mask=border_img
             )
         
         return qr_code_image
