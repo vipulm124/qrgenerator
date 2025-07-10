@@ -16,7 +16,7 @@ QRGenerator is a Python package for generating highly customizable QR codes with
 Install via PyPI:
 
 ```bash
-pip install qrgenerator
+pip install qrstyler
 ```
 
 ## Usage Example
