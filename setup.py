@@ -12,7 +12,7 @@ setup(
     description="A simple QR code generator",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="",
+    url="https://github.com/vipulm124/qrgenerator",
     packages=find_packages(),
     package_data={
         'qrstyler': [

@@ -22,9 +22,9 @@ pip install qrgenerator
 ## Usage Example
 
 ```python
-from qrgenerator import QRGenerator # Main class for creating qr codes
-from qrgenerator.themes import THEMES_DICT,  ThemesEnum # to get access to theme enums and related pre-set configurations
-from qrgenerator.generator import QRConfig # This dataclass is the input to the main method of QRGenerator
+from qrstyler import QRGenerator # Main class for creating qr codes
+from qrstyler.themes import THEMES_DICT,  ThemesEnum # to get access to theme enums and related pre-set configurations
+from qrstyler.generator import QRConfig # This dataclass is the input to the main method of QRGenerator
 
 # Configure your QR code
 config = QRConfig(
@@ -81,8 +81,8 @@ You can use any of the following themes for quick branding and color matching. E
 ## Advanced Example
 
 ```python
-from qrgenerator.generator import QRConfig, QRGenerator
-from qrgenerator.themes import ThemesEnum
+from qrstyler.generator import QRConfig, QRGenerator
+from qrstyler.themes import ThemesEnum
 
 config = QRConfig(
     version=6,
