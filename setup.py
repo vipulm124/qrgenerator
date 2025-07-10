@@ -5,8 +5,8 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 
 setup(
-    name="qrgenerator",
-    version="0.1.0",
+    name="qrstyler",
+    version="1.0.0",
     author="Vipul Malhotra",
     author_email="vipulm124@gmail.com",
     description="A simple QR code generator",
@@ -15,7 +15,7 @@ setup(
     url="",
     packages=find_packages(),
     package_data={
-        'qrgenerator': [
+        'qrstyler': [
             'icons/*.png',
             'icons/*.webp',
             'themes/*.py',

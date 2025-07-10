@@ -195,7 +195,7 @@ class QRGenerator:
                 theme_logo = self.theme.get("logo", None)
                 if theme_logo:
                     package_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-                    logo_path = os.path.join(package_root, "qrgenerator", theme_logo)
+                    logo_path = os.path.join(package_root, "qrstyler", theme_logo)
                 else:
                     logo_path = None
         else:
@@ -209,13 +209,13 @@ class QRGenerator:
 
         if self.show_logo and logo_path and os.path.exists(logo_path):
             logo = Image.open(logo_path).convert("RGBA")
-            logo_size = int(min(qr_code_image.size) * 0.20)  # 20% of QR size
+            logo_size = int(min(qr_code_image.size) * 0.11)  # 20% of QR size
             logo.thumbnail((logo_size, logo_size))
 
             # Create a rounded rectangle mask for the logo
             mask = Image.new('L', logo.size, 0)
             draw = ImageDraw.Draw(mask)
-            radius = int(min(logo.size) * 0.10)  # 10% corner radius
+            radius = int(min(logo.size) * 0.15)  # 10% corner radius
             draw.rounded_rectangle(
                 [(0, 0), logo.size],
                 radius=radius,
@@ -227,7 +227,7 @@ class QRGenerator:
             logo_rounded.paste(logo, (0, 0), mask=mask)
 
             # Create a white border with rounded corners (fully opaque)
-            border_size = 12  # Thickness of border
+            border_size = 8  # Thickness of border (reduced from 12 to 6)
             border_img_size = (logo.size[0] + 2 * border_size, logo.size[1] + 2 * border_size)
             border_img = Image.new('RGBA', border_img_size, (255, 255, 255, 255))  # Opaque white
             border_draw = ImageDraw.Draw(border_img)
@@ -259,3 +259,25 @@ class QRGenerator:
             )
         
         return qr_code_image
+
+
+output_file = "qr_code_local.png"
+default_config = QRConfig(version=4, show_logo=True, theme=ThemesEnum.WHATSAPP, show_theme=False, color_positiond_detection_corners=True, custom_finder_pattern_color="#96CC38")
+qrcode_generator = QRGenerator(default_config)
+qrcode_ready_to_save = qrcode_generator.generate_qr_code("https://www.google.com", output_file=output_file)
+if qrcode_ready_to_save is not None:
+    qrcode_ready_to_save.save(output_file)
+
+config = QRConfig(
+    version=6,
+    show_logo=True,
+    show_theme=True,
+    theme=ThemesEnum.INSTAGRAM,
+    color_positiond_detection_corners=True,
+    custom_finder_pattern_color="#E66030",
+    custom_theme_color="#987FEA",
+    box_size=12,
+    border=4,
+)
+qrgen = QRGenerator(config)
+qrgen.generate_qr_code("https://instagram.com/yourprofile", output_file="instagram_qr_local.png")
