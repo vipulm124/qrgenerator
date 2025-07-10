@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="qrstyler",
-    version="1.1.0",
+    version="1.1.2",
     author="Vipul Malhotra",
     author_email="vipulm124@gmail.com",
     description="A simple QR code generator",
