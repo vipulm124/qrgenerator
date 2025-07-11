@@ -17,12 +17,12 @@ config = QRConfig(
     version=6,
     show_logo=True,
     show_theme=True,
-    theme=ThemesEnum.INSTAGRAM,
+    theme=ThemesEnum.LINKEDIN,
     color_positiond_detection_corners=True,
-    custom_finder_pattern_color="#E66030",
-    custom_theme_color="#987FEA",
-    box_size=12,
+    custom_finder_pattern_color="#051F57",
+    custom_theme_color="#4387E7",
+    box_size=10,
     border=4,
 )
 qrgen = QRGenerator(config)
-qrgen.generate_qr_code("https://instagram.com/yourprofile", output_file="instagram_qr.png")
+qrgen.generate_qr_code("https://www.linkedin.com/in/vipul-malhotra-5545b829/", output_file="linkedin_qr.png")
